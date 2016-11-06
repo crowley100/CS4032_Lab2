@@ -10,7 +10,7 @@ main = do
     sock <- socket AF_INET Stream 0    -- new socket
     setSocketOption sock ReuseAddr 1   -- make socket reuseable
     bind sock (SockAddrInet 8000 iNADDR_ANY)   -- listen on port 8000.
-    listen sock 2                              -- 2 queued connections
+    listen sock 1                              -- 2 queued connections
     mainLoop sock
   
 -- handle connections  
@@ -24,6 +24,6 @@ mainLoop sock = do
 runConn :: (Socket, SockAddr) -> IO ()
 runConn (sock, _) = do
     handle <- socketToHandle sock ReadWriteMode
-    hSetBuffering handle NoBuffering -- can change to LineBuffering
+    hSetBuffering handle LineBuffering -- can change to LineBuffering
     hPutStrLn handle "Hello, world!"
     hClose handle

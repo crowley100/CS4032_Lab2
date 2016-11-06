@@ -16,7 +16,7 @@ msgSender :: Socket -> IO ()
 msgSender sock = do
   handle <- socketToHandle sock ReadWriteMode
   hSetBuffering handle LineBuffering
-  hPutStrLn handle "GET /server.hs?message=its+high+noon HTTP/1.0\r\n\r\n"
+  --hPutStrLn handle "GET /server.hs?message=its+high+noon HTTP/1.0\r\n\r\n"
   rMsg <- hGetContents handle
   putStrLn rMsg
   hClose handle
