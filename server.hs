@@ -10,20 +10,23 @@ main = do
     sock <- socket AF_INET Stream 0    -- new socket
     setSocketOption sock ReuseAddr 1   -- make socket reuseable
     bind sock (SockAddrInet 8000 iNADDR_ANY)   -- listen on port 8000.
-    listen sock 1                              -- 2 queued connections
+    listen sock 3                              -- 2 queued connections
     mainLoop sock
   
 -- handle connections  
 mainLoop :: Socket -> IO ()
 mainLoop sock = do
     conn <- accept sock     -- accept a new client connection
-    forkIO (runConn conn)   -- run our server's logic for each client connection in separate thread
+    forkIO (hdlConn conn)   -- run our server's logic for each client connection in separate thread
+    runConn conn
     mainLoop sock           -- loop
 
 -- server logic
-runConn :: (Socket, SockAddr) -> IO ()
-runConn (sock, _) = do
+hdlConn :: (Socket, SockAddr) -> IO ()
+hdlConn (sock, _) = do
     handle <- socketToHandle sock ReadWriteMode
     hSetBuffering handle LineBuffering -- can change to LineBuffering
     hPutStrLn handle "Hello, world!"
+    threadDelay 10000000
+    hPutStrLn handle "still there?"
     hClose handle

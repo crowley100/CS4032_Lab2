@@ -4,6 +4,7 @@ import qualified Data.ByteString.Char8 as B8
 import System.IO
 import System.Posix.Unistd
 
+
 client :: String -> Int -> IO ()
 client host port = withSocketsDo $ do
                 addrInfo <- getAddrInfo Nothing (Just host) (Just $ show port)
