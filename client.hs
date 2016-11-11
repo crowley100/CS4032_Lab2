@@ -3,6 +3,8 @@ import Network.Socket.ByteString
 import qualified Data.ByteString.Char8 as B8
 import System.IO
 import System.Posix.Unistd
+import System.Exit
+import System.Environment
 
 
 client :: String -> Int -> IO ()
