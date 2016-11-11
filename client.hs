@@ -23,6 +23,9 @@ msgSender sock = do
   rMsg <- hGetContents handle
   putStrLn rMsg
   hClose handle
-  
+
 main :: IO ()
-main = client "localhost" 8000
+main = withSocketsDo $ do
+    (host:portStr:_) <- getArgs
+    let port = read portStr :: Int
+    client host port

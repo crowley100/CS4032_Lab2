@@ -6,10 +6,20 @@ import System.Environment
 import Network.Socket
 import Network.BSD
 import Control.Concurrent
-import Control.ThreadPool
 import Control.Monad
 
 myPool = 10
+
+threadPoolIO :: Int -> (a -> IO b) -> IO (Chan a, Chan b)
+threadPoolIO nr mutator = do
+    input <- newChan
+    output <- newChan
+    forM_ [1..nr] $
+        \_ -> forkIO (forever $ do
+            i <- readChan input
+            o <- mutator i
+            writeChan output o)
+    return (input, output)
 
 -- init
 runServer :: Int -> IO ()
@@ -34,7 +44,7 @@ hdlConn (port,(sock, _)) = do
     t <- myThreadId
     print t
     handle <- socketToHandle sock ReadWriteMode
-    hSetBuffering handle LineBuffering -- can change to LineBuffering
+    hSetBuffering handle LineBuffering
     
     msg <- hGetLine handle
     let hiMsg = myResponse msg "134.226.32.10" port
