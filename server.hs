@@ -48,7 +48,7 @@ hdlConn (port,(sock, _)) = do
     
     msg <- hGetLine handle
     let hiMsg = myResponse msg "134.226.32.10" port
-    
+    print hiMsg
     case head $ words msg of
         "KILL_SERVICE" -> sClose sock
         "HELO" -> hPutStr handle hiMsg

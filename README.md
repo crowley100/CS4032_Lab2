@@ -3,7 +3,7 @@ Solution for Distributed Systems Lab 2
 
 # Running
 
-No exta dependecies
+No extra dependecies
 
 Use ./compile.sh to compile source
 
